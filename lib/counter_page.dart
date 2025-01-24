@@ -1,4 +1,5 @@
 import 'package:counter_bloc/bloc/counter/counter_blocs.dart';
+import 'package:counter_bloc/bloc/counter/counter_state.dart';
 import 'package:counter_bloc/bloc/theme/theme_bloc.dart';
 import 'package:counter_bloc/widgets/row_buttons.dart';
 import 'package:flutter/material.dart';
@@ -32,22 +33,22 @@ class CounterPage extends StatelessWidget {
           children: [
             // 🎯 First Counter: Shows even numbers in SnackBar
             // Uses separate BlocListener and BlocBuilder for demonstration
-            BlocListener<BuilderCounterBloc, int>(
+            BlocListener<BuilderCounterBloc, BuilderState>(
               listener: (context, state) {
-                if (state % 2 == 0 && state != 0) {
+                if (state.count % 2 == 0 && state.count != 0) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                         content:
-                            Text('First Counter reached Even Number: $state')),
+                            Text('Even Number: ${state.count}')),
                   );
                 }
               },
               child: Column(
                 children: [
-                  BlocBuilder<BuilderCounterBloc, int>(
+                  BlocBuilder<BuilderCounterBloc, BuilderState>(
                     builder: (context, state) {
                       return Text(
-                        'Builder + Listener Counter: $state',
+                        'Builder Counter: ${state.count}',
                         style: Theme.of(context).textTheme.headlineSmall,
                       );
                     },
@@ -66,13 +67,13 @@ class CounterPage extends StatelessWidget {
             const SizedBox(height: 40),
             // 🎯 Second Counter: Shows odd numbers in SnackBar
             // Uses BlocConsumer which combines listener and builder
-            BlocConsumer<ConsumerCounterBloc, int>(
+            BlocConsumer<ConsumerCounterBloc, ConsumerState>(
               listener: (context, state) {
-                if (state % 2 != 0 && state != 0) {
+                if (state.count % 2 != 0 && state.count != 0) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content:
-                          Text('Second Counter reached Odd Number: $state'),
+                          Text('Odd Number: ${state.count}'),
                     ),
                   );
                 }
@@ -81,7 +82,7 @@ class CounterPage extends StatelessWidget {
                 return Column(
                   children: [
                     Text(
-                      'Consumer Counter: $state',
+                      'Consumer Counter: ${state.count}',
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     RowButtons(onIncrementPressed: () {
